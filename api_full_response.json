@@ -1,0 +1,236 @@
+{
+    "comment_analyses": [
+        {
+            "quote": "iPhone 15 Pro Review: The Good, The Bad, & The Ugly!",
+            "sentiment": "neutral",
+            "theme": "product review",
+            "purchase_intent": "none",
+            "confidence_score": 0.9,
+            "source_type": "video_title",
+            "video_id": "cBpGq-vDr2Y",
+            "video_url": "https://www.youtube.com/watch?v=cBpGq-vDr2Y",
+            "video_title": "iPhone 15 Pro Review: The Good, The Bad, & The Ugly!",
+            "video_author_channel": "Marques Brownlee",
+            "quote_author_name": "Marques Brownlee",
+            "quote_author_channel_id": "UCBJycsmduvYEL83R_U4JriQ",
+            "comment_id": null,
+            "comment_url": null,
+            "comment_like_count": null,
+            "comment_reply_count": null,
+            "video_view_count": 10498065,
+            "video_duration_seconds": 1482,
+            "video_published_time": "2 years ago",
+            "video_is_live": false,
+            "comment_published_time": null
+        },
+        {
+            "quote": "iPhone 15 Pro and Pro Max are refinements of last year's already refined phones.",
+            "sentiment": "positive",
+            "theme": "product quality",
+            "purchase_intent": "medium",
+            "confidence_score": 0.8,
+            "source_type": "video_description",
+            "video_id": "cBpGq-vDr2Y",
+            "video_url": "https://www.youtube.com/watch?v=cBpGq-vDr2Y",
+            "video_title": "iPhone 15 Pro Review: The Good, The Bad, & The Ugly!",
+            "video_author_channel": "Marques Brownlee",
+            "quote_author_name": "Marques Brownlee",
+            "quote_author_channel_id": "UCBJycsmduvYEL83R_U4JriQ",
+            "comment_id": null,
+            "comment_url": null,
+            "comment_like_count": null,
+            "comment_reply_count": null,
+            "video_view_count": 10498065,
+            "video_duration_seconds": 1482,
+            "video_published_time": "2 years ago",
+            "video_is_live": false,
+            "comment_published_time": null
+        },
+        {
+            "quote": "Get $300 off the Pod Cover with code MKBHD",
+            "sentiment": "neutral",
+            "theme": "promotion",
+            "purchase_intent": "none",
+            "confidence_score": 0.7,
+            "source_type": "video_description",
+            "video_id": "cBpGq-vDr2Y",
+            "video_url": "https://www.youtube.com/watch?v=cBpGq-vDr2Y",
+            "video_title": "iPhone 15 Pro Review: The Good, The Bad, & The Ugly!",
+            "video_author_channel": "Marques Brownlee",
+            "quote_author_name": "Marques Brownlee",
+            "quote_author_channel_id": "UCBJycsmduvYEL83R_U4JriQ",
+            "comment_id": null,
+            "comment_url": null,
+            "comment_like_count": null,
+            "comment_reply_count": null,
+            "video_view_count": 10498065,
+            "video_duration_seconds": 1482,
+            "video_published_time": "2 years ago",
+            "video_is_live": false,
+            "comment_published_time": null
+        },
+        {
+            "quote": "iPhone 15 Pro Review - Better than you think.",
+            "sentiment": "positive",
+            "theme": "product quality",
+            "purchase_intent": "medium",
+            "confidence_score": 0.85,
+            "source_type": "video_title",
+            "video_id": "JwAfHEHQKto",
+            "video_url": "https://www.youtube.com/watch?v=JwAfHEHQKto",
+            "video_title": "iPhone 15 Pro Review - Better than you think.",
+            "video_author_channel": "Mrwhosetheboss",
+            "quote_author_name": "Mrwhosetheboss",
+            "quote_author_channel_id": "UCMiJRAwDNSNzuYeN2uWa0pA",
+            "comment_id": null,
+            "comment_url": null,
+            "comment_like_count": null,
+            "comment_reply_count": null,
+            "video_view_count": 7836285,
+            "video_duration_seconds": 1168,
+            "video_published_time": "2 years ago",
+            "video_is_live": false,
+            "comment_published_time": null
+        },
+        {
+            "quote": "My full review of the Apple iPhone 15 Pro and Pro Max - including camera, battery, and more!",
+            "sentiment": "neutral",
+            "theme": "features",
+            "purchase_intent": "none",
+            "confidence_score": 0.7,
+            "source_type": "video_description",
+            "video_id": "JwAfHEHQKto",
+            "video_url": "https://www.youtube.com/watch?v=JwAfHEHQKto",
+            "video_title": "iPhone 15 Pro Review - Better than you think.",
+            "video_author_channel": "Mrwhosetheboss",
+            "quote_author_name": "Mrwhosetheboss",
+            "quote_author_channel_id": "UCMiJRAwDNSNzuYeN2uWa0pA",
+            "comment_id": null,
+            "comment_url": null,
+            "comment_like_count": null,
+            "comment_reply_count": null,
+            "video_view_count": 7836285,
+            "video_duration_seconds": 1168,
+            "video_published_time": "2 years ago",
+            "video_is_live": false,
+            "comment_published_time": null
+        }
+    ],
+    "metadata": {
+        "total_videos_analyzed": 2,
+        "total_comments_found": 0,
+        "relevant_insights_extracted": 5,
+        "processing_time_seconds": 4.18,
+        "model_used": "gpt-4.1-2025-04-14",
+        "youtube_api_usage": {
+            "total_api_calls": 1,
+            "search_calls": 1,
+            "comment_calls": 0,
+            "request_delay": 0.5,
+            "timeout": 30.0
+        },
+        "openai_api_usage": {
+            "total_tokens": 1449,
+            "total_cost_usd": 0.0225,
+            "model": "gpt-4.1-2025-04-14",
+            "successful_analyses": 2,
+            "failed_analyses": 0
+        },
+        "sentiment_distribution": {
+            "positive": 2,
+            "negative": 0,
+            "neutral": 3
+        },
+        "purchase_intent_distribution": {
+            "high": 0,
+            "medium": 2,
+            "low": 0,
+            "none": 3
+        },
+        "top_themes": [
+            {
+                "theme": "product quality",
+                "count": 2,
+                "percentage": 40.0,
+                "average_confidence": 0.825,
+                "examples": [
+                    "iPhone 15 Pro and Pro Max are refinements of last year's already refined phones.",
+                    "iPhone 15 Pro Review - Better than you think."
+                ]
+            },
+            {
+                "theme": "product review",
+                "count": 1,
+                "percentage": 20.0,
+                "average_confidence": 0.9,
+                "examples": [
+                    "iPhone 15 Pro Review: The Good, The Bad, & The Ugly!"
+                ]
+            },
+            {
+                "theme": "promotion",
+                "count": 1,
+                "percentage": 20.0,
+                "average_confidence": 0.7,
+                "examples": [
+                    "Get $300 off the Pod Cover with code MKBHD"
+                ]
+            },
+            {
+                "theme": "features",
+                "count": 1,
+                "percentage": 20.0,
+                "average_confidence": 0.7,
+                "examples": [
+                    "My full review of the Apple iPhone 15 Pro and Pro Max - including camera, battery, and more!"
+                ]
+            }
+        ],
+        "youtube_specific": {
+            "search_query": "iPhone 15 Pro review",
+            "language": "en",
+            "region": "US",
+            "videos_found": 2,
+            "videos_cleaned": 2,
+            "total_comments_collected": 0,
+            "videos_with_comments": 0,
+            "videos_without_comments": 0,
+            "comment_collection_errors": 2,
+            "pipeline_stages": {
+                "stage1_search_time": 1.03,
+                "stage2_clean_time": 0.0,
+                "stage3_comments_time": 0.0,
+                "stage4_analysis_time": 3.15,
+                "stage5_build_time": 0.0
+            },
+            "source_distribution": {
+                "video_titles": 2,
+                "video_descriptions": 3,
+                "comments": 0
+            },
+            "unique_videos_with_insights": 2,
+            "average_views_per_video": 9433353,
+            "insights_from_live_videos": 0,
+            "average_video_duration_seconds": 1356,
+            "average_video_duration_formatted": "22:36",
+            "additional_metrics": {
+                "search_query": "iPhone 15 Pro review",
+                "language": "en",
+                "region": "US",
+                "videos_found": 2,
+                "videos_cleaned": 2,
+                "total_comments_collected": 0,
+                "videos_with_comments": 0,
+                "videos_without_comments": 0,
+                "comment_collection_errors": 2,
+                "pipeline_stages": {
+                    "stage1_search_time": 1.03,
+                    "stage2_clean_time": 0.0,
+                    "stage3_comments_time": 0.0,
+                    "stage4_analysis_time": 3.15,
+                    "stage5_build_time": 0.0
+                }
+            }
+        }
+    }
+}

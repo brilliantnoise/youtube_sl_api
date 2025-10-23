@@ -1,0 +1,32 @@
+Video at index 0 missing videoId, skipping
+Video at index 1 missing videoId, skipping
+No valid videos after cleaning
+Traceback (most recent call last):
+  File "/Users/liamwatfeh/projects/youtube_sl_api/test_e2e_simple.py", line 38, in test_e2e
+    json.dump(result, f, indent=2)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+                 ^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 433, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 407, in _iterencode_dict
+    yield from chunks
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 407, in _iterencode_dict
+    yield from chunks
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 407, in _iterencode_dict
+    yield from chunks
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py", line 341, in _iterencode_dict
+    raise ValueError("Circular reference detected")
+ValueError: Circular reference detected
+🧪 Testing End-to-End Pipeline (Direct Service Call)...
+======================================================================
+
+🔄 Running analysis...
+   Query: iPhone 15 Pro review
+   Max Videos: 2
+   Max Comments: 10
+   Model: gpt-4o-mini
+
+
+❌ Error: Circular reference detected
