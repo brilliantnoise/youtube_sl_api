@@ -31,14 +31,17 @@ X-API-Key: your-api-key-here
 }
 ```
 
-### Full Request Body (All Parameters)
+### Full Request Body (ALL Parameters)
 ```json
 {
   "query": "iPhone 16 Pro review",
-  "max_videos": 5,
+  "max_videos": 20,
   "max_comments_per_video": 50,
-  "include_video_content": true,
-  "include_comments": true
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Analyze sentiment, themes, and purchase intent",
+  "model": "gpt-4.1-2025-04-14",
+  "max_quote_length": 200
 }
 ```
 
@@ -52,17 +55,20 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
   }'
 ```
 
-### cURL Example (Full Request)
+### cURL Example (Full Request - All Parameters)
 ```bash
 curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: your-api-key-here" \
   -d '{
     "query": "Tesla Model 3 review",
-    "max_videos": 5,
+    "max_videos": 10,
     "max_comments_per_video": 50,
-    "include_video_content": true,
-    "include_comments": true
+    "language": "en",
+    "region": "US",
+    "ai_analysis_prompt": "Focus on battery life, build quality, and value for money",
+    "model": "gpt-4.1-2025-04-14",
+    "max_quote_length": 200
   }'
 ```
 
@@ -70,13 +76,18 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
 
 ## Request Parameters
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `query` | string | ✅ Yes | - | YouTube search query |
-| `max_videos` | integer | No | 5 | Videos to analyze (1-20) |
-| `max_comments_per_video` | integer | No | 50 | Comments per video (0-200) |
-| `include_video_content` | boolean | No | true | Analyze video metadata |
-| `include_comments` | boolean | No | true | Analyze comments |
+| Parameter | Type | Required | Default | Range | Description |
+|-----------|------|----------|---------|-------|-------------|
+| `query` | string | ✅ Yes | - | 1-200 chars | YouTube search query |
+| `max_videos` | integer | No | 20 | 1-50 | Number of videos to analyze |
+| `max_comments_per_video` | integer | No | 50 | 10-100 | Comments per video to analyze |
+| `language` | string | No | `"en"` | 2-5 chars | Language code (e.g., 'en', 'es', 'fr') |
+| `region` | string | No | `"US"` | 2-5 chars | Region code (e.g., 'US', 'UK', 'CA') |
+| `ai_analysis_prompt` | string | No | See below* | 10-500 chars | **Custom AI analysis instructions** |
+| `model` | string | No | `"gpt-4.1-2025-04-14"` | - | OpenAI model to use |
+| `max_quote_length` | integer | No | 200 | 50-500 | Max length for extracted quotes |
+
+**Default `ai_analysis_prompt`:** `"Analyze sentiment, themes, and purchase intent"`
 
 ---
 
@@ -148,17 +159,19 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
 
 ## Quick Examples
 
-### 1. Product Research
+### 1. Product Research (Custom AI Prompt)
 ```json
 {
   "query": "AirPods Pro 2 worth it",
   "max_videos": 10,
   "max_comments_per_video": 100,
-  "include_video_content": true,
-  "include_comments": true
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Focus on value for money, sound quality complaints, and battery life feedback. Identify if people think it's worth the price.",
+  "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Understand if customers think product is worth buying
+**Use case:** Understand if customers think product is worth buying with targeted analysis
 
 ### 2. Competitor Analysis
 ```json
@@ -166,8 +179,10 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
   "query": "Samsung vs iPhone comparison",
   "max_videos": 5,
   "max_comments_per_video": 50,
-  "include_video_content": true,
-  "include_comments": true
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Compare sentiment between Samsung and iPhone. Identify which brand gets more positive mentions and why.",
+  "model": "gpt-4.1-2025-04-14"
 }
 ```
 **Use case:** Compare sentiment between competing products
@@ -178,35 +193,115 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
   "query": "Nike running shoes review 2024",
   "max_videos": 15,
   "max_comments_per_video": 75,
-  "include_video_content": true,
-  "include_comments": true
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Analyze sentiment, identify complaints about durability, comfort issues, and sizing problems.",
+  "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Track what people say about your brand
+**Use case:** Track what people say about your brand and identify product issues
 
-### 4. Feature Validation
+### 4. Feature Validation (Specific Feature Focus)
 ```json
 {
   "query": "iPhone 16 Pro Action button useful",
   "max_videos": 5,
   "max_comments_per_video": 30,
-  "include_video_content": true,
-  "include_comments": true
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Focus exclusively on opinions about the Action button feature. Is it useful or gimmicky?",
+  "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Validate specific product features
+**Use case:** Validate specific product features with targeted AI analysis
 
-### 5. Video-Only Analysis (Skip Comments)
+### 5. Multi-Language Analysis
 ```json
 {
-  "query": "Best laptops 2024",
+  "query": "PlayStation 5 review",
   "max_videos": 10,
-  "max_comments_per_video": 0,
-  "include_video_content": true,
-  "include_comments": false
+  "max_comments_per_video": 50,
+  "language": "es",
+  "region": "ES",
+  "ai_analysis_prompt": "Analiza el sentimiento, temas principales y intención de compra",
+  "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Analyze only video titles, descriptions, and metadata
+**Use case:** Analyze Spanish-language content for European market
+
+### 6. Advanced: Purchase Intent Focus
+```json
+{
+  "query": "MacBook Pro M4 review",
+  "max_videos": 20,
+  "max_comments_per_video": 100,
+  "language": "en",
+  "region": "US",
+  "ai_analysis_prompt": "Identify high purchase intent signals: 'I'm buying', 'just ordered', 'convinced me'. Categorize by price concerns vs feature satisfaction.",
+  "model": "gpt-4.1-2025-04-14",
+  "max_quote_length": 300
+}
+```
+**Use case:** Deep dive into purchase intent with longer quotes and specific signal detection
+
+---
+
+## 🎯 Customizing AI Analysis with `ai_analysis_prompt`
+
+The **`ai_analysis_prompt`** parameter is the most powerful feature - it lets you customize what the AI looks for.
+
+### Default Behavior
+```json
+{
+  "ai_analysis_prompt": "Analyze sentiment, themes, and purchase intent"
+}
+```
+This gives you general sentiment, themes, and purchase signals.
+
+### Custom Prompts for Specific Insights
+
+**Example 1: Focus on Specific Attributes**
+```json
+{
+  "ai_analysis_prompt": "Focus on camera quality, battery life, and screen brightness. Ignore price discussions."
+}
+```
+
+**Example 2: Identify Pain Points**
+```json
+{
+  "ai_analysis_prompt": "Identify customer complaints, frustrations, and deal-breakers. What makes people return this product?"
+}
+```
+
+**Example 3: Competitive Intelligence**
+```json
+{
+  "ai_analysis_prompt": "When users compare this to competitors, what specific advantages or disadvantages do they mention?"
+}
+```
+
+**Example 4: Decision Factors**
+```json
+{
+  "ai_analysis_prompt": "What factors are making people decide to buy or not buy? Price, features, alternatives mentioned?"
+}
+```
+
+**Example 5: Use Case Discovery**
+```json
+{
+  "ai_analysis_prompt": "What specific use cases do people mention? How are they actually using this product?"
+}
+```
+
+### Tips for Effective Prompts
+
+✅ **Be specific**: "Focus on X, Y, Z" works better than "analyze everything"  
+✅ **Ask questions**: "Is it durable?" vs "analyze durability"  
+✅ **Set scope**: "Ignore price" or "Only focus on technical aspects"  
+✅ **Request categorization**: "Categorize by pro users vs casual users"  
+✅ **Multi-language**: Write prompts in target language for better results
 
 ---
 
