@@ -2,8 +2,11 @@ from typing import Optional
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+# Only load .env in local development (not in Railway/production)
+if os.getenv("RAILWAY_ENVIRONMENT") is None:
+    load_dotenv()
 
 class Settings(BaseSettings):
     # API Configuration

@@ -48,12 +48,19 @@ api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     # Startup
+    logger.info("=" * 60)
     logger.info("Starting YouTube Social Media Analysis API")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"API Version: {settings.API_VERSION}")
+    logger.info(f"Port: {settings.PORT}")
     logger.info(f"Default Model: {settings.DEFAULT_MODEL}")
     logger.info(f"Max Videos Per Request: {settings.MAX_VIDEOS_PER_REQUEST}")
     logger.info(f"Max Comments Per Video: {settings.MAX_COMMENTS_PER_VIDEO}")
+    logger.info(f"YouTube API Key: {'✓ SET' if settings.YOUTUBE_RAPIDAPI_KEY else '✗ MISSING'}")
+    logger.info(f"OpenAI API Key: {'✓ SET' if settings.OPENAI_API_KEY else '✗ MISSING'}")
+    logger.info(f"Service API Key: {'✓ SET' if settings.SERVICE_API_KEY else '✗ MISSING'}")
+    logger.info("=" * 60)
+    logger.info("✅ API Ready!")
     
     yield
     

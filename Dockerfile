@@ -25,6 +25,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
+# Copy and set executable permissions for entrypoint
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
@@ -35,6 +39,6 @@ USER appuser
 # Expose port (Railway will set this dynamically)
 EXPOSE 8000
 
-# Start application (Railway sets $PORT dynamically)
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1
+# Start application using entrypoint script (shell form for variable substitution)
+CMD ["/bin/sh", "/app/entrypoint.sh"]
 
