@@ -8,7 +8,8 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PORT=8000
 
 # Install system dependencies
 RUN apt-get update && \
@@ -39,6 +40,6 @@ USER appuser
 # Expose port (Railway will set this dynamically)
 EXPOSE 8000
 
-# Start application using entrypoint script (shell form for variable substitution)
-CMD ["/bin/sh", "/app/entrypoint.sh"]
+# Start application using entrypoint script
+CMD ["/bin/bash", "/app/entrypoint.sh"]
 
