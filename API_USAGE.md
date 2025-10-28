@@ -15,7 +15,7 @@ All insights come with **full source tracking** (which video, comment, or author
 
 ### Endpoint
 ```
-POST https://your-api-domain.com/analyze-youtube-search
+POST https://youtubeslapi-production.up.railway.app/analyze-youtube-search
 ```
 
 ### Headers
@@ -24,7 +24,14 @@ Content-Type: application/json
 X-API-Key: your-api-key-here
 ```
 
-### Request Body
+### Minimal Request Body
+```json
+{
+  "query": "iPhone 16 Pro review"
+}
+```
+
+### Full Request Body (All Parameters)
 ```json
 {
   "query": "iPhone 16 Pro review",
@@ -35,15 +42,27 @@ X-API-Key: your-api-key-here
 }
 ```
 
-### Full Example (cURL)
+### cURL Example (Minimal)
 ```bash
-curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
+curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key-here" \
+  -d '{
+    "query": "Tesla Model 3 review"
+  }'
+```
+
+### cURL Example (Full Request)
+```bash
+curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: your-api-key-here" \
   -d '{
     "query": "Tesla Model 3 review",
-    "max_videos": 3,
-    "max_comments_per_video": 30
+    "max_videos": 5,
+    "max_comments_per_video": 50,
+    "include_video_content": true,
+    "include_comments": true
   }'
 ```
 
@@ -134,7 +153,9 @@ curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
 {
   "query": "AirPods Pro 2 worth it",
   "max_videos": 10,
-  "max_comments_per_video": 100
+  "max_comments_per_video": 100,
+  "include_video_content": true,
+  "include_comments": true
 }
 ```
 **Use case:** Understand if customers think product is worth buying
@@ -144,7 +165,9 @@ curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
 {
   "query": "Samsung vs iPhone comparison",
   "max_videos": 5,
-  "max_comments_per_video": 50
+  "max_comments_per_video": 50,
+  "include_video_content": true,
+  "include_comments": true
 }
 ```
 **Use case:** Compare sentiment between competing products
@@ -154,7 +177,9 @@ curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
 {
   "query": "Nike running shoes review 2024",
   "max_videos": 15,
-  "max_comments_per_video": 75
+  "max_comments_per_video": 75,
+  "include_video_content": true,
+  "include_comments": true
 }
 ```
 **Use case:** Track what people say about your brand
@@ -164,10 +189,24 @@ curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
 {
   "query": "iPhone 16 Pro Action button useful",
   "max_videos": 5,
-  "max_comments_per_video": 30
+  "max_comments_per_video": 30,
+  "include_video_content": true,
+  "include_comments": true
 }
 ```
 **Use case:** Validate specific product features
+
+### 5. Video-Only Analysis (Skip Comments)
+```json
+{
+  "query": "Best laptops 2024",
+  "max_videos": 10,
+  "max_comments_per_video": 0,
+  "include_video_content": true,
+  "include_comments": false
+}
+```
+**Use case:** Analyze only video titles, descriptions, and metadata
 
 ---
 
@@ -225,7 +264,7 @@ curl -X POST "https://your-api-domain.com/analyze-youtube-search" \
 ## Need Help?
 
 - **Documentation:** See `RAILWAY_DEPLOYMENT.md` for setup
-- **API Docs:** Visit `https://your-api-domain.com/docs` for interactive docs
+- **API Docs:** Visit `https://youtubeslapi-production.up.railway.app/docs` for interactive docs
 - **GitHub:** https://github.com/liamwatfeh/youtube_sl_api
 
 ---
