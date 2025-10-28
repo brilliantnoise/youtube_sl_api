@@ -83,7 +83,7 @@ class Settings(BaseSettings):
         default=30.0,
         env="REQUEST_TIMEOUT",
         description="HTTP request timeout in seconds",
-        ge=10.0, le=120.0
+        ge=10.0, le=600.0
     )
     YOUTUBE_REQUEST_DELAY: float = Field(
         default=0.5,
