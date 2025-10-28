@@ -24,14 +24,7 @@ Content-Type: application/json
 X-API-Key: your-api-key-here
 ```
 
-### Minimal Request Body
-```json
-{
-  "query": "iPhone 16 Pro review"
-}
-```
-
-### Full Request Body (ALL Parameters)
+### Request Body
 ```json
 {
   "query": "iPhone 16 Pro review",
@@ -45,17 +38,7 @@ X-API-Key: your-api-key-here
 }
 ```
 
-### cURL Example (Minimal)
-```bash
-curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: your-api-key-here" \
-  -d '{
-    "query": "Tesla Model 3 review"
-  }'
-```
-
-### cURL Example (Full Request - All Parameters)
+### cURL Example
 ```bash
 curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
   -H "Content-Type: application/json" \
@@ -76,18 +59,29 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
 
 ## Request Parameters
 
+**Note:** Only `query` is required. All other parameters have defaults and can be omitted.
+
 | Parameter | Type | Required | Default | Range | Description |
 |-----------|------|----------|---------|-------|-------------|
-| `query` | string | ✅ Yes | - | 1-200 chars | YouTube search query |
-| `max_videos` | integer | No | 20 | 1-50 | Number of videos to analyze |
-| `max_comments_per_video` | integer | No | 50 | 10-100 | Comments per video to analyze |
-| `language` | string | No | `"en"` | 2-5 chars | Language code (e.g., 'en', 'es', 'fr') |
-| `region` | string | No | `"US"` | 2-5 chars | Region code (e.g., 'US', 'UK', 'CA') |
-| `ai_analysis_prompt` | string | No | See below* | 10-500 chars | **Custom AI analysis instructions** |
-| `model` | string | No | `"gpt-4.1-2025-04-14"` | - | OpenAI model to use |
-| `max_quote_length` | integer | No | 200 | 50-500 | Max length for extracted quotes |
+| `query` | string | ✅ **Required** | - | 1-200 chars | YouTube search query |
+| `max_videos` | integer | Optional | `20` | 1-50 | Number of videos to analyze |
+| `max_comments_per_video` | integer | Optional | `50` | 10-100 | Comments per video to analyze |
+| `language` | string | Optional | `"en"` | 2-5 chars | Language code (e.g., 'en', 'es', 'fr') |
+| `region` | string | Optional | `"US"` | 2-5 chars | Region code (e.g., 'US', 'UK', 'CA') |
+| `ai_analysis_prompt` | string | Optional | See below* | 10-500 chars | **Custom AI analysis instructions** |
+| `model` | string | Optional | `"gpt-4.1-2025-04-14"` | - | OpenAI model to use |
+| `max_quote_length` | integer | Optional | `200` | 50-500 | Max length for extracted quotes |
 
 **Default `ai_analysis_prompt`:** `"Analyze sentiment, themes, and purchase intent"`
+
+### Minimal Valid Request
+If you only want to use defaults, you can send just the query:
+```json
+{
+  "query": "iPhone 16 Pro review"
+}
+```
+This will use all default values shown in the table above.
 
 ---
 
