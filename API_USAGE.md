@@ -32,11 +32,15 @@ X-API-Key: your-api-key-here
   "max_comments_per_video": 50,
   "language": "en",
   "region": "US",
+  "start_date": "2024-10-01",
+  "end_date": "2024-11-19",
   "ai_analysis_prompt": "Analyze sentiment, themes, and purchase intent",
   "model": "gpt-4.1-2025-04-14",
   "max_quote_length": 200
 }
 ```
+
+**Note:** `start_date` and `end_date` are optional. Omit both to analyze all comments regardless of date.
 
 ### cURL Example
 ```bash
@@ -49,6 +53,8 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
     "max_comments_per_video": 50,
     "language": "en",
     "region": "US",
+    "start_date": "2024-10-01",
+    "end_date": "2024-11-19",
     "ai_analysis_prompt": "Focus on battery life, build quality, and value for money",
     "model": "gpt-4.1-2025-04-14",
     "max_quote_length": 200
@@ -300,11 +306,13 @@ Common region-to-timezone mappings:
   "max_comments_per_video": 100,
   "language": "en",
   "region": "US",
+  "start_date": "2024-09-01",
+  "end_date": "2024-11-19",
   "ai_analysis_prompt": "Focus on value for money, sound quality complaints, and battery life feedback. Identify if people think it's worth the price.",
   "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Understand if customers think product is worth buying with targeted analysis
+**Use case:** Understand if customers think product is worth buying with targeted analysis (last 3 months only)
 
 ### 2. Competitor Analysis
 ```json
@@ -320,7 +328,7 @@ Common region-to-timezone mappings:
 ```
 **Use case:** Compare sentiment between competing products
 
-### 3. Brand Monitoring
+### 3. Brand Monitoring (With Recent Comments Only)
 ```json
 {
   "query": "Nike running shoes review 2024",
@@ -328,11 +336,13 @@ Common region-to-timezone mappings:
   "max_comments_per_video": 75,
   "language": "en",
   "region": "US",
+  "start_date": "2024-10-01",
+  "end_date": "2024-11-19",
   "ai_analysis_prompt": "Analyze sentiment, identify complaints about durability, comfort issues, and sizing problems.",
   "model": "gpt-4.1-2025-04-14"
 }
 ```
-**Use case:** Track what people say about your brand and identify product issues
+**Use case:** Track what people say about your brand and identify product issues (Q4 2024 feedback only)
 
 ### 4. Feature Validation (Specific Feature Focus)
 ```json
@@ -483,9 +493,11 @@ This gives you general sentiment, themes, and purchase signals.
 
 1. **Be Specific** - Use targeted queries like "iPhone 16 Pro camera quality" vs "iPhone"
 2. **Adjust Limits** - More videos/comments = better insights but slower response
-3. **Check Themes** - Use `top_themes` to discover unexpected topics
-4. **Track Sources** - Every insight includes full source tracking for verification
-5. **Monitor Intent** - Track `purchase_intent_distribution` over time
+3. **Use Date Filtering** - Filter by date range to analyze recent sentiment or track changes over time
+4. **Check Themes** - Use `top_themes` to discover unexpected topics
+5. **Track Sources** - Every insight includes full source tracking for verification
+6. **Monitor Intent** - Track `purchase_intent_distribution` over time
+7. **Save Costs** - Date filtering happens before AI analysis, reducing OpenAI API costs
 
 ---
 
