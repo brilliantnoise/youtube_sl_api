@@ -68,6 +68,8 @@ curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-sea
 | `max_comments_per_video` | integer | Optional | `50` | 10-100 | Comments per video to analyze |
 | `language` | string | Optional | `"en"` | 2-5 chars | Language code (e.g., 'en', 'es', 'fr') |
 | `region` | string | Optional | `"US"` | 2-5 chars | Region code (e.g., 'US', 'UK', 'CA') |
+| `start_date` | string | Optional | `null` | YYYY-MM-DD | Filter comments from this date onwards (must provide both dates) |
+| `end_date` | string | Optional | `null` | YYYY-MM-DD | Filter comments up to this date (must provide both dates) |
 | `ai_analysis_prompt` | string | Optional | See below* | 10-500 chars | **Custom AI analysis instructions** |
 | `model` | string | Optional | `"gpt-4.1-2025-04-14"` | - | OpenAI model to use |
 | `max_quote_length` | integer | Optional | `200` | 50-500 | Max length for extracted quotes |
@@ -82,6 +84,143 @@ If you only want to use defaults, you can send just the query:
 }
 ```
 This will use all default values shown in the table above.
+
+---
+
+## 📅 Date Filtering
+
+Filter comments by date range to analyze sentiment trends over specific time periods.
+
+### Key Features
+- ✅ **Cost Savings**: Comments are filtered **BEFORE** AI analysis → Lower OpenAI costs
+- ✅ **Timezone Aware**: Automatically infers timezone from `region` parameter
+- ✅ **ISO Format**: Uses standard `YYYY-MM-DD` format (e.g., `"2024-11-19"`)
+- ✅ **Both Required**: Must provide both `start_date` and `end_date` together
+
+### How It Works
+1. YouTube provides relative dates (e.g., "1 month ago", "3 days ago")
+2. System converts these to absolute dates using region timezone
+3. Comments outside date range are filtered out
+4. Only filtered comments are sent to AI for analysis
+
+### Important Notes
+⚠️ **Both dates required**: You cannot provide only one date
+⚠️ **Date format**: Must be `YYYY-MM-DD` (ISO 8601)
+⚠️ **Timezone**: Inferred from `region` (e.g., `"US"` → `America/New_York`)
+⚠️ **Approximate**: YouTube's relative dates are approximate (e.g., "1 month ago" ≈ 30 days)
+
+### Example 1: Analyze Q4 2024 Comments
+
+```bash
+curl -X POST "https://youtubeslapi-production.up.railway.app/analyze-youtube-search" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key-here" \
+  -d '{
+    "query": "Tesla Model 3",
+    "max_videos": 10,
+    "start_date": "2024-10-01",
+    "end_date": "2024-12-31",
+    "region": "US"
+  }'
+```
+
+### Example 2: Last 30 Days Only
+
+```json
+{
+  "query": "iPhone 16 Pro review",
+  "max_videos": 15,
+  "start_date": "2024-10-20",
+  "end_date": "2024-11-19",
+  "region": "UK"
+}
+```
+**Timezone**: `Europe/London` (inferred from `"UK"`)
+
+### Example 3: Compare Different Time Periods
+
+**Recent sentiment** (last week):
+```json
+{
+  "query": "Samsung Galaxy S24",
+  "start_date": "2024-11-12",
+  "end_date": "2024-11-19"
+}
+```
+
+**Historical sentiment** (3 months ago):
+```json
+{
+  "query": "Samsung Galaxy S24",
+  "start_date": "2024-08-01",
+  "end_date": "2024-08-31"
+}
+```
+
+### Response Metadata
+When date filtering is applied, the response includes:
+
+```json
+{
+  "metadata": {
+    "youtube_specific": {
+      "date_filter_applied": true,
+      "date_filter_stats": {
+        "total_comments_before": 150,
+        "total_comments_after": 45,
+        "comments_filtered_out": 105,
+        "comments_unparseable": 0,
+        "videos_with_comments": 8,
+        "videos_without_comments": 2,
+        "date_range": {
+          "start": "2024-10-01",
+          "end": "2024-12-31",
+          "timezone": "America/New_York"
+        }
+      }
+    }
+  }
+}
+```
+
+### Error Handling
+
+**Error 1: Only one date provided**
+```json
+{
+  "error": "DATE_VALIDATION",
+  "message": "Both start_date and end_date must be provided together, or neither."
+}
+```
+
+**Error 2: Invalid date range**
+```json
+{
+  "error": "DATE_VALIDATION",
+  "message": "Invalid date range: start_date (2024-12-31) cannot be after end_date (2024-01-01)."
+}
+```
+
+**Error 3: Invalid format**
+```json
+{
+  "error": "VALIDATION_ERROR",
+  "message": "String should match pattern '^\\d{4}-\\d{2}-\\d{2}$'"
+}
+```
+
+### Supported Regions & Timezones
+
+Common region-to-timezone mappings:
+- `"US"` → `America/New_York`
+- `"UK"`, `"GB"` → `Europe/London`
+- `"JP"` → `Asia/Tokyo`
+- `"AU"` → `Australia/Sydney`
+- `"FR"` → `Europe/Paris`
+- `"CA"` → `America/Toronto`
+- Unknown regions → `UTC`
+
+*See full list in the codebase: `app/utils/date_parser.py`*
 
 ---
 

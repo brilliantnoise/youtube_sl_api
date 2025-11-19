@@ -170,6 +170,16 @@ class YouTubeSearchAnalysisRequest(BaseModel):
         ge=50,
         le=500
     )
+    start_date: Optional[str] = Field(
+        default=None,
+        description="Filter comments from this date onwards (ISO format: YYYY-MM-DD). Optional. Must be provided with end_date.",
+        pattern=r'^\d{4}-\d{2}-\d{2}$'
+    )
+    end_date: Optional[str] = Field(
+        default=None,
+        description="Filter comments up to this date (ISO format: YYYY-MM-DD). Optional. Must be provided with start_date.",
+        pattern=r'^\d{4}-\d{2}-\d{2}$'
+    )
     
     @validator('query')
     def validate_query(cls, v):
@@ -177,6 +187,52 @@ class YouTubeSearchAnalysisRequest(BaseModel):
         if not query:
             raise ValueError('Search query cannot be empty')
         return query
+    
+    @validator('end_date', always=True)
+    def validate_date_range(cls, end_date, values):
+        """
+        Validate that:
+        1. Both start_date and end_date are provided together (or neither)
+        2. Date format is valid ISO 8601 (YYYY-MM-DD)
+        3. start_date <= end_date
+        """
+        start_date = values.get('start_date')
+        
+        # Check that both are provided or both are None
+        if (start_date is None) != (end_date is None):
+            raise ValueError(
+                'Both start_date and end_date must be provided together, or neither. '
+                'You cannot provide only one date parameter.'
+            )
+        
+        # If both provided, validate the range
+        if start_date and end_date:
+            try:
+                from datetime import datetime
+                
+                # Parse dates to validate format
+                start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+                end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+                
+                # Check that start_date is not after end_date
+                if start_dt > end_dt:
+                    raise ValueError(
+                        f'Invalid date range: start_date ({start_date}) cannot be after '
+                        f'end_date ({end_date}). Please ensure start_date is earlier than '
+                        f'or equal to end_date.'
+                    )
+            
+            except ValueError as e:
+                # Re-raise if it's already our custom message
+                if "Invalid date range" in str(e) or "cannot be after" in str(e):
+                    raise
+                # Otherwise it's a date parsing error
+                raise ValueError(
+                    f'Invalid date format. Expected YYYY-MM-DD (e.g., "2024-01-15"). '
+                    f'Error: {str(e)}'
+                )
+        
+        return end_date
 
 class YouTubeAnalysisItem(BaseModel):
     """Individual analysis result with source tracking."""

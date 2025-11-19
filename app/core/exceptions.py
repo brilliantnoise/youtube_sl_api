@@ -77,6 +77,22 @@ class YouTubeValidationError(YouTubeAPIException):
             details["provided_value"] = value
         super().__init__(message, status_code=400, details=details)
 
+class DateValidationError(YouTubeAPIException):
+    """Date validation error for date range filtering."""
+    
+    def __init__(
+        self,
+        message: str,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None
+    ):
+        details = {}
+        if start_date:
+            details["start_date"] = start_date
+        if end_date:
+            details["end_date"] = end_date
+        super().__init__(message, status_code=400, details=details)
+
 class YouTubeDataCollectionError(YouTubeAPIException):
     """YouTube data collection error."""
     

@@ -19,6 +19,7 @@ from app.core.config import settings
 from app.core.exceptions import (
     YouTubeAPIException,
     YouTubeValidationError,
+    DateValidationError,
     YouTubeDataCollectionError,
     YouTubeAnalysisError,
     RateLimitExceededError,
@@ -166,6 +167,16 @@ async def validation_error_handler(request: Request, exc: YouTubeValidationError
     )
 
 
+@app.exception_handler(DateValidationError)
+async def date_validation_error_handler(request: Request, exc: DateValidationError):
+    """Handle date validation errors."""
+    logger.warning(f"Date Validation Error: {exc.message}")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=exc.to_dict()
+    )
+
+
 @app.exception_handler(YouTubeDataCollectionError)
 async def data_collection_error_handler(request: Request, exc: YouTubeDataCollectionError):
     """Handle data collection errors."""
@@ -294,6 +305,8 @@ async def health_check() -> Dict[str, str]:
     - **ai_analysis_prompt**: Custom AI instructions (optional)
     - **model**: OpenAI model (optional, default from config)
     - **max_quote_length**: Max quote length (50-500, default: 200)
+    - **start_date**: Filter comments from this date (YYYY-MM-DD, optional)
+    - **end_date**: Filter comments to this date (YYYY-MM-DD, optional)
     
     ## Response
     Returns analyzed insights with:
@@ -376,6 +389,12 @@ async def analyze_youtube_search(
         f"max_comments={analysis_request.max_comments_per_video}"
     )
     
+    # Log date filtering if provided
+    if analysis_request.start_date and analysis_request.end_date:
+        logger.info(
+            f"Date filtering enabled: {analysis_request.start_date} to {analysis_request.end_date}"
+        )
+    
     try:
         # Initialize service
         service = YouTubeSearchAnalysisService()
@@ -389,7 +408,9 @@ async def analyze_youtube_search(
             region=analysis_request.region,
             ai_analysis_prompt=analysis_request.ai_analysis_prompt,
             model=analysis_request.model,
-            max_quote_length=analysis_request.max_quote_length
+            max_quote_length=analysis_request.max_quote_length,
+            start_date=analysis_request.start_date,
+            end_date=analysis_request.end_date
         )
         
         logger.info(

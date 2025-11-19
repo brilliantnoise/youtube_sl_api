@@ -63,7 +63,9 @@ class YouTubeSearchAnalysisService:
         region: str = "US",
         ai_analysis_prompt: str = "Analyze sentiment, themes, and purchase intent",
         model: str = None,
-        max_quote_length: int = 200
+        max_quote_length: int = 200,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Complete YouTube search analysis pipeline.
@@ -77,6 +79,8 @@ class YouTubeSearchAnalysisService:
             ai_analysis_prompt: Custom AI analysis instructions
             model: OpenAI model to use (uses default if not provided)
             max_quote_length: Maximum length for extracted quotes
+            start_date: Filter comments from this date onwards (ISO format: YYYY-MM-DD, optional)
+            end_date: Filter comments up to this date (ISO format: YYYY-MM-DD, optional)
             
         Returns:
             Complete analysis response with metadata
@@ -85,6 +89,7 @@ class YouTubeSearchAnalysisService:
             YouTubeValidationError: Invalid input parameters
             YouTubeDataCollectionError: Error collecting YouTube data
             YouTubeAnalysisError: Error during AI analysis
+            DateValidationError: Invalid date parameters
         """
         start_time = datetime.utcnow()
         
@@ -204,6 +209,83 @@ class YouTubeSearchAnalysisService:
             )
             logger.info("=" * 60)
             
+            # ========== STAGE 3.5: Filter Comments by Date Range (OPTIONAL) ==========
+            filter_stats = None
+            stage3_5_time = 0
+            if start_date and end_date:
+                logger.info("=" * 60)
+                logger.info("Stage 3.5: Filtering comments by date range")
+                logger.info(f"Date Range: {start_date} to {end_date}")
+                logger.info(f"Region: {region} (timezone inferred from region)")
+                stage3_5_start = datetime.utcnow()
+                
+                try:
+                    from app.utils.date_parser import get_region_timezone, validate_date_range
+                    from app.services.youtube_shared.youtube_date_filter import YouTubeDateFilter
+                    from app.core.exceptions import DateValidationError
+                    import pytz
+                    
+                    # Get timezone from region
+                    timezone_str = get_region_timezone(region)
+                    logger.info(f"  → Using timezone: {timezone_str}")
+                    
+                    # Validate and parse dates
+                    logger.info(f"  → Validating date range...")
+                    start_dt, end_dt = validate_date_range(start_date, end_date, timezone_str)
+                    logger.info(f"  → Date range validated: {start_dt} to {end_dt}")
+                    
+                    # Get reference date (current time in the specified timezone)
+                    reference_date = datetime.now(pytz.timezone(timezone_str))
+                    logger.info(f"  → Reference date (now in {timezone_str}): {reference_date}")
+                    
+                    # Filter comments
+                    logger.info(f"  → Filtering {total_cleaned_comments} comments...")
+                    date_filter = YouTubeDateFilter()
+                    filter_result = date_filter.filter_comments_by_date_range(
+                        comments_by_video=cleaned_comments_by_video,
+                        start_date=start_dt,
+                        end_date=end_dt,
+                        reference_date=reference_date
+                    )
+                    
+                    # Update with filtered comments
+                    cleaned_comments_by_video = filter_result["filtered_comments_by_video"]
+                    filter_stats = filter_result["filter_stats"]
+                    total_cleaned_comments = filter_stats["total_comments_after"]
+                    
+                    logger.info(
+                        f"  ✅ Date filtering complete: "
+                        f"{filter_stats['total_comments_before']} → {filter_stats['total_comments_after']} comments "
+                        f"({filter_stats['comments_filtered_out']} filtered out, "
+                        f"{filter_stats['comments_unparseable']} unparseable)"
+                    )
+                    logger.info(
+                        f"  → Videos: {filter_stats['videos_with_comments']} with comments, "
+                        f"{filter_stats['videos_without_comments']} without comments in date range"
+                    )
+                    
+                    if filter_stats['comments_unparseable'] > 0:
+                        logger.warning(
+                            f"  ⚠️  {filter_stats['comments_unparseable']} comments had unparseable dates"
+                        )
+                    
+                except DateValidationError as e:
+                    logger.error(f"❌ Stage 3.5 (date validation) FAILED: {e.message}")
+                    import traceback
+                    logger.error(traceback.format_exc())
+                    raise
+                except Exception as e:
+                    logger.error(f"❌ Stage 3.5 (date filtering) FAILED: {type(e).__name__}: {str(e)}")
+                    import traceback
+                    logger.error(traceback.format_exc())
+                    raise
+                
+                stage3_5_time = (datetime.utcnow() - stage3_5_start).total_seconds()
+                logger.info(f"Stage 3.5 complete in {stage3_5_time:.2f}s")
+                logger.info("=" * 60)
+            else:
+                logger.info(f"📝 Note: No date filtering applied (start_date/end_date not provided)")
+            
             # ========== STAGE 4: AI Analysis ==========
             logger.info("=" * 60)
             logger.info("Stage 4: AI analysis of content and comments")
@@ -287,10 +369,13 @@ class YouTubeSearchAnalysisService:
                 "videos_with_comments": comment_metadata.get("videos_with_comments", 0),
                 "videos_without_comments": comment_metadata.get("videos_without_comments", 0),
                 "comment_collection_errors": len(comment_metadata.get("errors", [])),
+                "date_filter_applied": bool(start_date and end_date),
+                "date_filter_stats": filter_stats if filter_stats else None,
                 "pipeline_stages": {
                     "stage1_search_time": round(stage1_time, 2),
                     "stage2_clean_time": round(stage2_time, 2),
                     "stage3_comments_time": round(stage3_time, 2),
+                    "stage3_5_date_filter_time": round(stage3_5_time, 2) if (start_date and end_date) else 0,
                     "stage4_analysis_time": round(stage4_time, 2),
                     "stage5_build_time": round(
                         (datetime.utcnow() - stage5_start).total_seconds(), 2

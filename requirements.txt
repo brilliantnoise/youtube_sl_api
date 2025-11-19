@@ -32,6 +32,10 @@ structlog>=24.1.0
 pandas>=2.2.0
 numpy>=1.26.0
 
+# Date and Time Processing
+python-dateutil>=2.8.2
+pytz>=2024.1
+
 # Additional FastAPI Extensions
 python-multipart>=0.0.9
 
